@@ -11,6 +11,7 @@ import {
   CardContent,
 } from "@/components/ui/card"
 import {Textarea} from "@/components/ui/textarea";
+import {Alert, AlertTitle, AlertDescription} from "@/components/ui/alert";
 
 interface Charity {
   id: string;
