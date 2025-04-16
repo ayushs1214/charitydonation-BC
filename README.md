@@ -1,5 +1,3 @@
-{# ChainDonation
-
 ## Overview
 
 ChainDonation is a Next.js application that facilitates secure and transparent donations to verified charities through blockchain technology. The platform provides a user-friendly interface for browsing charities, viewing donation addresses, and generating AI-powered trustworthiness reports.
@@ -38,7 +36,7 @@ ChainDonation is a Next.js application that facilitates secure and transparent d
 1.  **Clone the repository**:
 
     ```bash
-    git clone [repository-url]
+    git clone [[repository-url]](https://github.com/ayushs1214/charitydonation-BC)
     cd ChainDonation
     ```
 
