@@ -1,35 +1,43 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   transition: background-color 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
+}
+
+.container {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 1rem;
 }
 
 @layer base {
   :root {
-    --background: 0 0% 96.1%;
-    --foreground: 0 0% 3.9%;
+    --background: 220 14% 96%; /* Light Gray */
+    --foreground: 220 10% 39%; /* Dark Gray */
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
+    --card-foreground: 220 10% 39%;
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 180 100% 25%; /* Teal */
+    --popover-foreground: 220 10% 39%;
+    --primary: 170 100% 36%; /* Slightly darker Teal */
     --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 51 100% 50%; /* Gold */
-    --accent-foreground: 0 0% 9%;
-    --destructive: 0 84.2% 60.2%;
+    --secondary: 220 14% 93%;
+    --secondary-foreground: 220 10% 39%;
+    --muted: 220 20% 80%;
+    --muted-foreground: 220 10% 39%;
+    --accent: 48 89% 57%; /* Bright Gold */
+    --accent-foreground: 220 10% 39%;
+    --destructive: 0 73% 51%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
-    --radius: 0.5rem;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 170 100% 36%; /* Teal Ring */
+    --radius: 0.75rem;
+
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 240 5.9% 10%;
@@ -41,30 +49,27 @@ body {
   }
 
   .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 180 100% 75%; /* Lighter Teal */
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 51 100% 50%; /* Gold */
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
+    --background: 220 10% 13%; /* Dark Background */
+    --foreground: 220 14% 96%; /* Light Foreground */
+    --card: 220 10% 13%;
+    --card-foreground: 220 14% 96%;
+    --popover: 220 10% 13%;
+    --popover-foreground: 220 14% 96%;
+    --primary: 170 100% 60%; /* Bright Teal */
+    --primary-foreground: 220 10% 13%;
+    --secondary: 220 10% 20%;
+    --secondary-foreground: 220 14% 96%;
+    --muted: 220 10% 20%;
+    --muted-foreground: 220 20% 60%;
+    --accent: 48 89% 57%; /* Bright Gold */
+    --accent-foreground: 220 10% 13%;
+    --destructive: 0 73% 70%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --border: 220 10% 20%;
+    --input: 220 10% 20%;
+    --ring: 170 100% 60%; /* Teal Ring */
+    --radius: 0.75rem;
+
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -84,3 +89,54 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* Additional styling for enhanced UI */
+.card {
+  @apply rounded-lg shadow-md transition-shadow duration-300 hover:shadow-lg;
+}
+
+.btn-primary {
+  @apply bg-primary text-primary-foreground hover:bg-primary/80 transition-colors duration-300;
+}
+
+.btn-secondary {
+  @apply bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors duration-300;
+}
+
+.input-field {
+  @apply rounded-md shadow-sm focus:ring-primary focus:border-primary transition-colors duration-300;
+}
+
+.text-primary {
+  color: hsl(var(--primary));
+  transition: color 0.3s ease;
+}
+
+.text-secondary {
+   color: hsl(var(--secondary));
+  transition: color 0.3s ease;
+}
+
+.alert-box {
+  @apply rounded-md p-4 mb-4 shadow-sm;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Transition for hover effects */
+.hover-scale {
+  transition: transform 0.3s ease-in-out;
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+

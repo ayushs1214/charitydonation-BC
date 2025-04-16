@@ -1,4 +1,3 @@
-
 import React, {useState, useEffect, useCallback} from 'react';
 import {QRCodeCanvas} from 'qrcode.react';
 import {toast} from "@/hooks/use-toast";
@@ -14,6 +13,7 @@ import {
 import {Textarea} from "@/components/ui/textarea";
 import {Alert, AlertTitle, AlertDescription} from "@/components/ui/alert";
 import {monitorCharityTrustworthiness} from "@/ai/flows/monitor-charity-flow";
+import {MonitorCharityTrustworthinessOutput} from "@/ai/flows/monitor-charity-flow";
 
 interface Charity {
   id: string;
@@ -24,8 +24,8 @@ interface Charity {
 
 interface CharityDetailsProps {
   charity: Charity;
-  aiReport: any;
-  setAiReport: (report: any) => void;
+  aiReport: MonitorCharityTrustworthinessOutput | null;
+  setAiReport: (report: MonitorCharityTrustworthinessOutput | null) => void;
 }
 
 export const CharityDetails: React.FC<CharityDetailsProps> = ({
@@ -87,7 +87,7 @@ export const CharityDetails: React.FC<CharityDetailsProps> = ({
   }, [charity.name, charity.description, setAiReport]);
 
   return (
-    <div className="transition-colors duration-300">
+    <div className="transition-colors duration-300 fade-in">
       <Card className="shadow-md hover:shadow-lg transition-shadow duration-300">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-primary">{charity.name}</CardTitle>
@@ -106,13 +106,13 @@ export const CharityDetails: React.FC<CharityDetailsProps> = ({
             <Textarea
               value={walletAddress}
               onChange={handleAddressChange}
-              className="w-full mt-2 rounded-md shadow-sm focus:ring-primary focus:border-primary transition-colors duration-300"
+              className="w-full mt-2 rounded-md shadow-sm focus:ring-primary focus:border-primary transition-colors duration-300 input-field"
               placeholder="Wallet Address"
             />
             {addressError && (
               <p className="text-red-500 mt-1">{addressError}</p>
             )}
-            <Button variant="secondary" onClick={handleCopyAddress} className="mt-2">
+            <Button variant="secondary" onClick={handleCopyAddress} className="mt-2 hover-scale">
               <Icons.copy className="w-4 h-4 mr-2"/>
               Copy Address
             </Button>
@@ -125,13 +125,13 @@ export const CharityDetails: React.FC<CharityDetailsProps> = ({
             <Button
               onClick={handleGenerateReport}
               disabled={loadingReport}
-              className="bg-accent text-accent-foreground hover:bg-accent-foreground hover:text-accent transition-colors duration-300"
+              className="bg-accent text-accent-foreground hover:bg-accent-foreground hover:text-accent transition-colors duration-300 hover-scale"
             >
               {loadingReport ? 'Generating...' : 'Generate Report'}
             </Button>
 
             {reportError && (
-              <Alert variant="destructive" className="mt-4">
+              <Alert variant="destructive" className="mt-4 alert-box">
                 <AlertTitle>Report Error</AlertTitle>
                 <AlertDescription>{reportError}</AlertDescription>
               </Alert>
@@ -143,7 +143,7 @@ export const CharityDetails: React.FC<CharityDetailsProps> = ({
                   Report:
                 </h4>
                 <p className="text-muted-foreground">{aiReport.report}</p>
-                {aiReport.concerns.length > 0 && (
+                {aiReport.concerns && aiReport.concerns.length > 0 && (
                   <div>
                     <h4 className="font-semibold mt-2 text-secondary transition-colors duration-300">
                       Concerns:

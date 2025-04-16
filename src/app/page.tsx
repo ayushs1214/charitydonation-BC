@@ -1,4 +1,3 @@
-
 'use client';
 
 import {useEffect, useState} from 'react';
@@ -78,7 +77,7 @@ export default function Home() {
     };
 
     setCharities([...charities, charityToAdd]);
-    setNewCharity({ name: '', description: '', walletAddress: '' });
+    setNewCharity({name: '', description: '', walletAddress: ''});
     setOpen(false);
     toast({
       title: 'Success',
@@ -88,104 +87,118 @@ export default function Home() {
   };
 
   return (
-    <div className="container mx-auto p-4 transition-colors duration-300">
-      <h1 className="text-3xl font-bold mb-6 text-primary transition-colors duration-300">
-        ChainDonation
-      </h1>
+    <div className="container mx-auto p-4 transition-colors duration-300 fade-in">
+      <header className="mb-6">
+        <h1 className="text-3xl font-bold text-primary transition-colors duration-300">
+          ChainDonation
+        </h1>
+        <p className="text-muted-foreground mt-1">
+          Donate with trust and transparency.
+        </p>
+      </header>
+
       {error && (
-        <Alert variant="destructive">
+        <Alert variant="destructive" className="alert-box">
           <AlertTitle>Error</AlertTitle>
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
 
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold text-secondary transition-colors duration-300">
-          Verified Charities
-        </h2>
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild>
-            <Button variant="outline">Add Charity</Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>Add a New Charity</DialogTitle>
-              <DialogDescription>
-                Fill in the details to list a new charity.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-right">
-                  Name
-                </Label>
-                <Input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={newCharity.name}
-                  onChange={handleInputChange}
-                  className="col-span-3"
-                />
+      <section className="mb-8">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-semibold text-secondary transition-colors duration-300">
+            Verified Charities
+          </h2>
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline" className="hover-scale">Add Charity</Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Add a New Charity</DialogTitle>
+                <DialogDescription>
+                  Fill in the details to list a new charity.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="name" className="text-right">
+                    Name
+                  </Label>
+                  <Input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={newCharity.name}
+                    onChange={handleInputChange}
+                    className="col-span-3 input-field"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="description" className="text-right">
+                    Description
+                  </Label>
+                  <Input
+                    type="text"
+                    id="description"
+                    name="description"
+                    value={newCharity.description}
+                    onChange={handleInputChange}
+                    className="col-span-3 input-field"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="walletAddress" className="text-right">
+                    Wallet Address
+                  </Label>
+                  <Input
+                    type="text"
+                    id="walletAddress"
+                    name="walletAddress"
+                    value={newCharity.walletAddress}
+                    onChange={handleInputChange}
+                    className="col-span-3 input-field"
+                  />
+                </div>
               </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="description" className="text-right">
-                  Description
-                </Label>
-                <Input
-                  type="text"
-                  id="description"
-                  name="description"
-                  value={newCharity.description}
-                  onChange={handleInputChange}
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="walletAddress" className="text-right">
-                  Wallet Address
-                </Label>
-                <Input
-                  type="text"
-                  id="walletAddress"
-                  name="walletAddress"
-                  value={newCharity.walletAddress}
-                  onChange={handleInputChange}
-                  className="col-span-3"
-                />
-              </div>
-            </div>
-            <Button type="submit" onClick={handleAddCharity}>
-              Add Charity
-            </Button>
-          </DialogContent>
-        </Dialog>
-      </div>
-
-      {loading ? (
-        <p className="text-lg text-muted-foreground transition-colors duration-300">
-          Loading charities...
-        </p>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="md:col-span-1">
-            <CharityList charities={charities} onSelect={handleCharitySelect} />
-          </div>
-          <div className="md:col-span-2">
-            {selectedCharity ? (
-              <CharityDetails
-                charity={selectedCharity}
-                aiReport={aiReport}
-                setAiReport={setAiReport}
-              />
-            ) : (
-              <p className="text-lg text-muted-foreground transition-colors duration-300">
-                Select a charity to view details.
-              </p>
-            )}
-          </div>
+              <Button type="submit" onClick={handleAddCharity} className="btn-primary hover-scale">
+                Add Charity
+              </Button>
+            </DialogContent>
+          </Dialog>
         </div>
-      )}
+
+        {loading ? (
+          <p className="text-lg text-muted-foreground transition-colors duration-300">
+            Loading charities...
+          </p>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="md:col-span-1">
+              <CharityList charities={charities} onSelect={handleCharitySelect}/>
+            </div>
+            <div className="md:col-span-2">
+              {selectedCharity ? (
+                <CharityDetails
+                  charity={selectedCharity}
+                  aiReport={aiReport}
+                  setAiReport={setAiReport}
+                />
+              ) : (
+                <p className="text-lg text-muted-foreground transition-colors duration-300">
+                  Select a charity to view details.
+                </p>
+              )}
+            </div>
+          </div>
+        )}
+      </section>
+
+      <footer className="mt-8 text-center text-muted-foreground">
+        <p>
+          ChainDonation - Donate with Trust &copy; {new Date().getFullYear()}
+        </p>
+      </footer>
     </div>
   );
 }
