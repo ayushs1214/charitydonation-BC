@@ -36,7 +36,7 @@ ChainDonation is a Next.js application that facilitates secure and transparent d
 1.  **Clone the repository**:
 
     ```bash
-    git clone [[repository-url]](https://github.com/ayushs1214/charitydonation-BC)
+    git clone 'https://github.com/ayushs1214/charitydonation-BC'
     cd ChainDonation
     ```
 
