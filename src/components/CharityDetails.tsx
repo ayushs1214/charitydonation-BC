@@ -1,13 +1,8 @@
-
 import React, {useState, useEffect} from 'react';
-import QRCode from 'qrcode.react';
+import { QRCodeCanvas } from 'qrcode.react';
 import {toast} from "@/hooks/use-toast";
 import {Icons} from "@/components/icons";
 import {Button} from "@/components/ui/button";
-import {monitorCharityTrustworthiness} from "@/ai/flows/monitor-charity-flow";
-import {Alert, AlertDescription, AlertTitle} from "@/components/ui/alert";
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
-import {Textarea} from "@/components/ui/textarea";
 
 interface Charity {
   id: string;
@@ -85,7 +80,7 @@ export const CharityDetails: React.FC<CharityDetailsProps> = ({
           <div className="flex flex-col items-center">
             <h3 className="text-lg font-semibold mb-2">Donate to:</h3>
             {walletAddress ? (
-              <QRCode value={walletAddress} size={128} level="H"/>
+              <QRCodeCanvas value={walletAddress} size={128} level="H"/>
             ) : (
               <p>No wallet address available.</p>
             )}
