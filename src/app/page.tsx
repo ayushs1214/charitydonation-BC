@@ -6,6 +6,12 @@ import {CharityList} from "@/components/CharityList";
 import {CharityDetails} from "@/components/CharityDetails";
 import {MonitorCharityTrustworthinessOutput} from "@/ai/flows/monitor-charity-flow";
 import {Alert, AlertDescription, AlertTitle} from "@/components/ui/alert";
+import {Button} from "@/components/ui/button";
+import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger} from "@/components/ui/dialog";
+import {Input} from "@/components/ui/input";
+import {Label} from "@/components/ui/label";
+import {toast} from "@/hooks/use-toast";
+import {useRouter} from "next/navigation";
 
 interface Charity {
   id: string;
@@ -20,7 +26,13 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [aiReport, setAiReport] = useState<MonitorCharityTrustworthinessOutput | null>(null);
-
+  const [open, setOpen] = useState(false);
+  const [newCharity, setNewCharity] = useState({
+    name: '',
+    description: '',
+    walletAddress: '',
+  });
+  const router = useRouter();
 
   useEffect(() => {
     async function loadCharities() {
@@ -42,9 +54,44 @@ export default function Home() {
     setAiReport(null);
   };
 
+  const handleInputChange = (e: any) => {
+    setNewCharity({
+      ...newCharity,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleAddCharity = () => {
+    if (!newCharity.name || !newCharity.description || !newCharity.walletAddress) {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Please fill in all fields.',
+      });
+      return;
+    }
+
+    const newId = (charities.length + 1).toString();
+    const charityToAdd = {
+      id: newId,
+      ...newCharity,
+    };
+
+    setCharities([...charities, charityToAdd]);
+    setNewCharity({ name: '', description: '', walletAddress: '' });
+    setOpen(false);
+    toast({
+      title: 'Success',
+      description: 'Charity added successfully.',
+    });
+    router.refresh(); // Refresh the route
+  };
+
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">ChainDonation</h1>
+    <div className="container mx-auto p-4 transition-colors duration-300">
+      <h1 className="text-3xl font-bold mb-6 text-primary transition-colors duration-300">
+        ChainDonation
+      </h1>
       {error && (
         <Alert variant="destructive">
           <AlertTitle>Error</AlertTitle>
@@ -52,10 +99,75 @@ export default function Home() {
         </Alert>
       )}
 
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-semibold text-secondary transition-colors duration-300">
+          Verified Charities
+        </h2>
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogTrigger asChild>
+            <Button variant="outline">Add Charity</Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Add a New Charity</DialogTitle>
+              <DialogDescription>
+                Fill in the details to list a new charity.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="name" className="text-right">
+                  Name
+                </Label>
+                <Input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={newCharity.name}
+                  onChange={handleInputChange}
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="description" className="text-right">
+                  Description
+                </Label>
+                <Input
+                  type="text"
+                  id="description"
+                  name="description"
+                  value={newCharity.description}
+                  onChange={handleInputChange}
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="walletAddress" className="text-right">
+                  Wallet Address
+                </Label>
+                <Input
+                  type="text"
+                  id="walletAddress"
+                  name="walletAddress"
+                  value={newCharity.walletAddress}
+                  onChange={handleInputChange}
+                  className="col-span-3"
+                />
+              </div>
+            </div>
+            <Button type="submit" onClick={handleAddCharity}>
+              Add Charity
+            </Button>
+          </DialogContent>
+        </Dialog>
+      </div>
+
       {loading ? (
-        <p>Loading charities...</p>
+        <p className="text-lg text-muted-foreground transition-colors duration-300">
+          Loading charities...
+        </p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="md:col-span-1">
             <CharityList charities={charities} onSelect={handleCharitySelect} />
           </div>
@@ -67,7 +179,9 @@ export default function Home() {
                 setAiReport={setAiReport}
               />
             ) : (
-              <p>Select a charity to view details.</p>
+              <p className="text-lg text-muted-foreground transition-colors duration-300">
+                Select a charity to view details.
+              </p>
             )}
           </div>
         </div>

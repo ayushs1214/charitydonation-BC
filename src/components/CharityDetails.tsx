@@ -1,5 +1,6 @@
-import React, {useState, useEffect} from 'react';
-import { QRCodeCanvas } from 'qrcode.react';
+
+import React, {useState, useEffect, useCallback} from 'react';
+import {QRCodeCanvas} from 'qrcode.react';
 import {toast} from "@/hooks/use-toast";
 import {Icons} from "@/components/icons";
 import {Button} from "@/components/ui/button";
@@ -12,6 +13,7 @@ import {
 } from "@/components/ui/card"
 import {Textarea} from "@/components/ui/textarea";
 import {Alert, AlertTitle, AlertDescription} from "@/components/ui/alert";
+import {monitorCharityTrustworthiness} from "@/ai/flows/monitor-charity-flow";
 
 interface Charity {
   id: string;
@@ -39,14 +41,15 @@ export const CharityDetails: React.FC<CharityDetailsProps> = ({
   useEffect(() => {
     setWalletAddress(charity.walletAddress);
     setAddressError(null);
+    setReportError(null);
   }, [charity.walletAddress]);
 
-  const handleAddressChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleAddressChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setWalletAddress(e.target.value);
     setAddressError(null);
-  };
+  }, []);
 
-  const handleCopyAddress = () => {
+  const handleCopyAddress = useCallback(() => {
     try {
       navigator.clipboard.writeText(walletAddress);
       toast({
@@ -60,9 +63,9 @@ export const CharityDetails: React.FC<CharityDetailsProps> = ({
         description: "Please copy the address manually!",
       });
     }
-  };
+  }, [walletAddress]);
 
-  const handleGenerateReport = async () => {
+  const handleGenerateReport = useCallback(async () => {
     setLoadingReport(true);
     setReportError(null);
     try {
@@ -73,49 +76,62 @@ export const CharityDetails: React.FC<CharityDetailsProps> = ({
       setAiReport(report);
     } catch (e: any) {
       setReportError("Failed to generate AI report: " + e.message);
+      toast({
+        variant: "destructive",
+        title: "Report Generation Failed",
+        description: "Failed to generate AI report: " + e.message,
+      });
     } finally {
       setLoadingReport(false);
     }
-  };
+  }, [charity.name, charity.description, setAiReport]);
 
   return (
-    <div>
-      <Card>
+    <div className="transition-colors duration-300">
+      <Card className="shadow-md hover:shadow-lg transition-shadow duration-300">
         <CardHeader>
-          <CardTitle>{charity.name}</CardTitle>
-          <CardDescription>{charity.description}</CardDescription>
+          <CardTitle className="text-2xl font-bold text-primary">{charity.name}</CardTitle>
+          <CardDescription className="text-muted-foreground">{charity.description}</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
           <div className="flex flex-col items-center">
-            <h3 className="text-lg font-semibold mb-2">Donate to:</h3>
+            <h3 className="text-lg font-semibold mb-2 text-secondary transition-colors duration-300">
+              Donate to:
+            </h3>
             {walletAddress ? (
               <QRCodeCanvas value={walletAddress} size={128} level="H"/>
             ) : (
-              <p>No wallet address available.</p>
+              <p className="text-muted-foreground">No wallet address available.</p>
             )}
             <Textarea
               value={walletAddress}
               onChange={handleAddressChange}
-              className="w-full mt-2"
+              className="w-full mt-2 rounded-md shadow-sm focus:ring-primary focus:border-primary transition-colors duration-300"
               placeholder="Wallet Address"
             />
             {addressError && (
               <p className="text-red-500 mt-1">{addressError}</p>
             )}
-            <Button variant="secondary" onClick={handleCopyAddress}>
+            <Button variant="secondary" onClick={handleCopyAddress} className="mt-2">
               <Icons.copy className="w-4 h-4 mr-2"/>
               Copy Address
             </Button>
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold mb-2">AI Trustworthiness Report</h3>
-            <Button onClick={handleGenerateReport} disabled={loadingReport}>
+            <h3 className="text-lg font-semibold mb-2 text-secondary transition-colors duration-300">
+              AI Trustworthiness Report
+            </h3>
+            <Button
+              onClick={handleGenerateReport}
+              disabled={loadingReport}
+              className="bg-accent text-accent-foreground hover:bg-accent-foreground hover:text-accent transition-colors duration-300"
+            >
               {loadingReport ? 'Generating...' : 'Generate Report'}
             </Button>
 
             {reportError && (
-              <Alert variant="destructive">
+              <Alert variant="destructive" className="mt-4">
                 <AlertTitle>Report Error</AlertTitle>
                 <AlertDescription>{reportError}</AlertDescription>
               </Alert>
@@ -123,12 +139,16 @@ export const CharityDetails: React.FC<CharityDetailsProps> = ({
 
             {aiReport ? (
               <div className="mt-4">
-                <h4 className="font-semibold">Report:</h4>
-                <p>{aiReport.report}</p>
+                <h4 className="font-semibold text-secondary transition-colors duration-300">
+                  Report:
+                </h4>
+                <p className="text-muted-foreground">{aiReport.report}</p>
                 {aiReport.concerns.length > 0 && (
                   <div>
-                    <h4 className="font-semibold mt-2">Concerns:</h4>
-                    <ul>
+                    <h4 className="font-semibold mt-2 text-secondary transition-colors duration-300">
+                      Concerns:
+                    </h4>
+                    <ul className="list-disc list-inside text-muted-foreground">
                       {aiReport.concerns.map((concern, index) => (
                         <li key={index}>{concern}</li>
                       ))}
@@ -137,7 +157,9 @@ export const CharityDetails: React.FC<CharityDetailsProps> = ({
                 )}
               </div>
             ) : (
-              <p>No report generated. Click "Generate Report" to create one.</p>
+              <p className="text-muted-foreground">
+                No report generated. Click "Generate Report" to create one.
+              </p>
             )}
           </div>
         </CardContent>
