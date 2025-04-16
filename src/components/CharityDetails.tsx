@@ -3,6 +3,14 @@ import { QRCodeCanvas } from 'qrcode.react';
 import {toast} from "@/hooks/use-toast";
 import {Icons} from "@/components/icons";
 import {Button} from "@/components/ui/button";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@/components/ui/card"
+import {Textarea} from "@/components/ui/textarea";
 
 interface Charity {
   id: string;
