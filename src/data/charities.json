@@ -1,0 +1,23 @@
+
+{
+  "charities": [
+    {
+      "id": "1",
+      "name": "Save the Children",
+      "description": "Works to improve the lives of children worldwide through education, healthcare, and disaster relief.",
+      "walletAddress": "0x1234567890abcdef1234567890abcdef12345678"
+    },
+    {
+      "id": "2",
+      "name": "Red Cross",
+      "description": "Provides humanitarian aid and disaster relief around the world.",
+      "walletAddress": "0xabcdef1234567890abcdef1234567890abcdef"
+    },
+    {
+      "id": "3",
+      "name": "UNICEF",
+      "description": "Works to protect children's rights and provide humanitarian assistance.",
+      "walletAddress": "0x9876543210fedcba9876543210fedcba98765432"
+    }
+  ]
+}
